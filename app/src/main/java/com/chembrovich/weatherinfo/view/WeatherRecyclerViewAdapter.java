@@ -14,7 +14,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
     private WeatherPresenterInterface presenter;
     private final WeatherFragment.OnWeatherFragmentInteractionListener listener;
 
-    public WeatherRecyclerViewAdapter(WeatherPresenterInterface presenter, WeatherFragment.OnWeatherFragmentInteractionListener listener) {
+    WeatherRecyclerViewAdapter(WeatherPresenterInterface presenter, WeatherFragment.OnWeatherFragmentInteractionListener listener) {
         this.presenter = presenter;
         this.listener = listener;
     }
@@ -28,23 +28,26 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != listener) {
-                    listener.onWeatherFragmentInteraction();
-                }
-            }
-        });
+        holder.weekDay.setText(presenter.getListItemWeekDay(position));
+        holder.dayWithMonth.setText(presenter.getListItemDayWithMonth(position));
+        holder.stateText.setText(presenter.getListItemWeatherState(position));
+        holder.temperature.setText(presenter.getListItemTemperature(position));
+        holder.windSpeed.setText(presenter.getListItemWindSpeed(position));
+        holder.humidity.setText(presenter.getListItemHumidity(position));
+        holder.cloudiness.setText(presenter.getListItemCloudiness(position));
+
+        ImageView stateImage = holder.stateImage;
+
+        int resourceId = StateImageHandler.getImageResourceId(presenter.getListItemImageDescription(position));
+        stateImage.setImageResource(resourceId);
     }
 
     @Override
     public int getItemCount() {
-        return 5;
+        return presenter.getWeatherListSize();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View view;
+    class ViewHolder extends RecyclerView.ViewHolder {
         final TextView weekDay;
         final TextView dayWithMonth;
         final ImageView stateImage;
@@ -56,7 +59,6 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
 
         ViewHolder(View view) {
             super(view);
-            this.view = view;
             weekDay =  view.findViewById(R.id.text_view_week_day);
             dayWithMonth = view.findViewById(R.id.text_view_day);
             stateImage =  view.findViewById(R.id.image_view_state);

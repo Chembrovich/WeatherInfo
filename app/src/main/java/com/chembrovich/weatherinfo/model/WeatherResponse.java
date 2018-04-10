@@ -8,13 +8,25 @@ import java.util.List;
 public class WeatherResponse {
     @SerializedName("cod")
     @Expose
-    public String code;
+    private String code;
 
-    @SerializedName("weatherList")
+    @SerializedName("list")
     @Expose
-    public List<WeatherList> weatherList;
+    private List<WeatherList> weatherList;
 
     @SerializedName("city")
     @Expose
-    public City city;
+    private City city;
+
+    public String getCode() {
+        return code;
+    }
+
+    public List<WeatherList> getWeatherList() {
+        return weatherList;
+    }
+
+    public City getCity() {
+        return city;
+    }
 }

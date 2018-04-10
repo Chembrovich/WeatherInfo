@@ -6,9 +6,17 @@ import com.google.gson.annotations.SerializedName;
 public class Coordinates {
     @SerializedName("lat")
     @Expose
-    public Double latitude;
+    private double latitude;
 
     @SerializedName("lon")
     @Expose
-    public Double longitude;
+    private double longitude;
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
 }

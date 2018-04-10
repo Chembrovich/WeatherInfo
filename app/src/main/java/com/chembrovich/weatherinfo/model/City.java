@@ -6,17 +6,33 @@ import com.google.gson.annotations.SerializedName;
 public class City {
     @SerializedName("id")
     @Expose
-    public Integer id;
+    private int id;
 
     @SerializedName("name")
     @Expose
-    public String name;
+    private String name;
 
     @SerializedName("coord")
     @Expose
-    public Coordinates coordinates;
+    private Coordinates coordinates;
 
     @SerializedName("country")
     @Expose
-    public String countryCode;
+    private String countryCode;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public String getCountryCode() {
+        return countryCode;
+    }
 }

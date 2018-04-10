@@ -7,17 +7,33 @@ public class WeatherDescription {
 
     @SerializedName("id")
     @Expose
-    public Integer id;
+    private int id;
 
     @SerializedName("main")
     @Expose
-    public String state;
+    private String state;
 
     @SerializedName("description")
     @Expose
-    public String description;
+    private String description;
 
     @SerializedName("icon")
     @Expose
-    public String icon;
+    private String icon;
+
+    public int getId() {
+        return id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
 }

@@ -44,7 +44,7 @@
         app:layout_constraintTop_toTopOf="@+id/image_view_current_state" />
 
     <TextView
-        android:id="@+id/text_view_current_weather"
+        android:id="@+id/text_view_current_state_and_weather"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

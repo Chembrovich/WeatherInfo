@@ -8,25 +8,49 @@ import java.util.List;
 public class WeatherList {
     @SerializedName("dt")
     @Expose
-    public Integer weatherForecastTime;
+    private int weatherForecastTime;
 
     @SerializedName("main")
     @Expose
-    public MainParameters mainParameters;
+    private MainParameters mainParameters;
 
     @SerializedName("weather")
     @Expose
-    public List<WeatherDescription> weatherDescription;
+    private List<WeatherDescription> weatherDescription;
 
     @SerializedName("clouds")
     @Expose
-    public Clouds clouds;
+    private Clouds clouds;
 
     @SerializedName("wind")
     @Expose
-    public Wind wind;
+    private Wind wind;
 
     @SerializedName("dt_txt")
     @Expose
-    public String dateAndTimeText;
+    private String dateAndTimeText;
+
+    public int getWeatherForecastTime() {
+        return weatherForecastTime;
+    }
+
+    public MainParameters getMainParameters() {
+        return mainParameters;
+    }
+
+    public List<WeatherDescription> getWeatherDescription() {
+        return weatherDescription;
+    }
+
+    public Clouds getClouds() {
+        return clouds;
+    }
+
+    public Wind getWind() {
+        return wind;
+    }
+
+    public String getDateAndTimeText() {
+        return dateAndTimeText;
+    }
 }

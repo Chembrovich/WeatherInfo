@@ -6,33 +6,65 @@ import com.google.gson.annotations.SerializedName;
 public class MainParameters {
     @SerializedName("temp")
     @Expose
-    public Double currentTemperature;
+    private double temperature;
 
     @SerializedName("temp_min")
     @Expose
-    public Double tempMin;
+    private double tempMin;
 
     @SerializedName("temp_max")
     @Expose
-    public Double tempMax;
+    private double tempMax;
 
     @SerializedName("pressure")
     @Expose
-    public Integer pressure;
+    private double pressure;
 
     @SerializedName("sea_level")
     @Expose
-    public Double seaLevel;
+    private double seaLevel;
 
     @SerializedName("grnd_level")
     @Expose
-    public Integer grndLevel;
+    private double groundLevel;
 
     @SerializedName("humidity")
     @Expose
-    public Integer humidity;
+    private int humidity;
 
     @SerializedName("temp_kf")
     @Expose
-    public Double tempKf;
+    private double tempKf;
+
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public double getTempMin() {
+        return tempMin;
+    }
+
+    public double getTempMax() {
+        return tempMax;
+    }
+
+    public double getPressure() {
+        return pressure;
+    }
+
+    public double getSeaLevel() {
+        return seaLevel;
+    }
+
+    public double getGroundLevel() {
+        return groundLevel;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
+
+    public double getTempKf() {
+        return tempKf;
+    }
 }
