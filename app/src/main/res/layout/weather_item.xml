@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/list_background_color"
+    android:orientation="horizontal"
+    tools:layout_editor_absoluteY="81dp">
+
+    <TextView
+        android:id="@+id/text_view_week_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mo"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_day"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_day" />
+
+    <TextView
+        android:id="@+id/text_view_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="16.02"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textColor="@android:color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_view_state"
+        android:layout_width="@dimen/image_view_list_item_size"
+        android:layout_height="@dimen/image_view_list_item_size"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toEndOf="@+id/text_view_week_day"
+        app:layout_constraintTop_toTopOf="@+id/text_view_week_day"
+        app:srcCompat="@drawable/clear_sky" />
+
+    <TextView
+        android:id="@+id/text_view_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Sunny"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/image_view_state"
+        app:layout_constraintTop_toTopOf="@+id/image_view_state" />
+
+    <TextView
+        android:id="@+id/text_view_temperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text='19"C'
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/text_view_state"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_state" />
+
+    <TextView
+        android:id="@+id/text_view_wind_speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:text="4mph"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_view_weather_parameter_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_wind_speed"
+        app:layout_constraintStart_toStartOf="@+id/image_view_wind_speed"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_wind_speed" />
+
+    <ImageView
+        android:id="@+id/image_view_wind_speed"
+        android:layout_width="@dimen/image_view_weather_property_size"
+        android:layout_height="@dimen/image_view_weather_property_size"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_humidity"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/text_view_temperature"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_temperature"
+        app:srcCompat="@drawable/wind_speed" />
+
+    <ImageView
+        android:id="@+id/image_view_humidity"
+        android:layout_width="@dimen/image_view_weather_property_size"
+        android:layout_height="@dimen/image_view_weather_property_size"
+        app:layout_constraintEnd_toStartOf="@+id/image_view_cloudiness"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_view_wind_speed"
+        app:layout_constraintTop_toTopOf="@+id/image_view_wind_speed"
+        app:srcCompat="@drawable/humidity" />
+
+    <ImageView
+        android:id="@+id/image_view_cloudiness"
+        android:layout_width="@dimen/image_view_weather_property_size"
+        android:layout_height="@dimen/image_view_weather_property_size"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/image_view_humidity"
+        app:layout_constraintTop_toTopOf="@+id/image_view_humidity"
+        app:srcCompat="@drawable/cloudiness" />
+
+    <TextView
+        android:id="@+id/text_view_humidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="63%"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_view_weather_parameter_size"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_humidity"
+        app:layout_constraintStart_toStartOf="@+id/image_view_humidity"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_humidity" />
+
+    <TextView
+        android:id="@+id/text_view_cloudiness"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="14%"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_view_weather_parameter_size"
+        app:layout_constraintEnd_toEndOf="@+id/image_view_cloudiness"
+        app:layout_constraintStart_toStartOf="@+id/image_view_cloudiness"
+        app:layout_constraintTop_toBottomOf="@+id/image_view_cloudiness" />
+
+</android.support.constraint.ConstraintLayout>

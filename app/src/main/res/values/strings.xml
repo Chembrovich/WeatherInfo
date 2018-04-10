@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Weather Info</string>
+    <string name="now">now</string>
+</resources>
