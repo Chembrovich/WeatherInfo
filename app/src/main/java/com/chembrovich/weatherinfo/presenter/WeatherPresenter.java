@@ -18,22 +18,23 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     private static final String CELSIUS = "°C";
     private static final String MILES_PER_HOUR = "mph";
     private static final String PERCENT = "%";
+    private static final String GPS_IS_DISABLED = "GPS is disabled";
+    private static final String THERE_IS_NO_INTERNET_CONNECTION = "There is no internet connection";
 
     private WeatherViewInterface view;
     private WeatherNetworkHandler networkHandler;
-    //private WeatherResponse response;
+
     private List<WeatherList> weatherList;
     private City city;
 
     public WeatherPresenter() {
-
     }
 
     @Override
     public void attachView(WeatherViewInterface view) {
         this.view = view;
+        this.view.requestLocation();
         networkHandler = new WeatherNetworkHandler(this);
-        networkHandler.makeRequestToGetWeather();
     }
 
     @Override
@@ -173,20 +174,47 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     @Override
+    public void newLocationsIsGetted(double latitude, double longitude) {
+        networkHandler.makeRequestToGetWeather(latitude, longitude);
+    }
+
+    @Override
+    public void gpsPermissionGranted() {
+        view.requestLocation();
+    }
+
+    @Override
+    public void gpsDisabled() {
+        view.makeMessage(GPS_IS_DISABLED);
+    }
+
+    @Override
+    public void gpsEnabled() {
+        view.requestLocation();
+    }
+
+    @Override
+    public void updateLocation() {
+        view.requestLocation();
+    }
+
+    @Override
     public void detachView() {
         this.view = null;
     }
 
     @Override
     public void weatherResponseIsReceived(WeatherResponse response) {
-//        this.response = response;
         this.weatherList = response.getWeatherList();
         this.city = response.getCity();
-        view.updateData();
+
+        if (view != null) {
+            view.updateData();
+        }
     }
 
     @Override
     public void onFailure() {
-
+        view.makeMessage(THERE_IS_NO_INTERNET_CONNECTION);
     }
 }

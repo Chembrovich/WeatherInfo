@@ -11,11 +11,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/now"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
+        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,9 +26,8 @@
         android:layout_height="@dimen/image_view_current_state_size"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:src="@drawable/clear_sky"
-        app:layout_constraintBottom_toTopOf="@+id/list"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/swipe_refresh_layout"
         app:layout_constraintStart_toStartOf="@+id/text_view_now"
         app:layout_constraintTop_toBottomOf="@+id/text_view_now"
         app:layout_constraintVertical_bias="0.5" />
@@ -36,35 +36,28 @@
         android:id="@+id/text_view_city"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Belgrade"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
         android:textColor="@android:color/black"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/image_view_current_state"
-        app:layout_constraintEnd_toEndOf="@+id/text_view_country"
-        app:layout_constraintTop_toTopOf="@+id/image_view_current_state" />
-
-    <TextView
-        android:id="@+id/text_view_current_state_and_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text='Sunny 19"C'
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/text_view_city"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_city" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintStart_toEndOf="@+id/image_view_current_state"
+        app:layout_constraintTop_toTopOf="@+id/image_view_current_state"
+        app:layout_constraintVertical_bias="0.14999998" />
 
     <TextView
         android:id="@+id/text_view_country"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:text="Serbia"
+        android:layout_marginBottom="4dp"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/text_view_city"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="@+id/text_view_city" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_center"
@@ -73,22 +66,43 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.4" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/list"
-        android:name="com.chembrovich.weatherinfo.WeatherFragment"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/list_background_color"
-        app:layoutManager="LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline_center"
-        tools:context="com.chembrovich.weatherinfo.view.WeatherFragment"
-        tools:listitem="@layout/weather_item">
+        app:layout_constraintTop_toTopOf="@+id/guideline_center">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:name="com.chembrovich.weatherinfo.WeatherFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/list_background_color"
+            app:layoutManager="LinearLayoutManager"
+
+            tools:context="com.chembrovich.weatherinfo.view.WeatherFragment"
+            tools:listitem="@layout/weather_item">
+
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <TextView
+        android:id="@+id/text_view_current_state_and_weather"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/text_view_city"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_city" />
+
 
 </android.support.constraint.ConstraintLayout>
 

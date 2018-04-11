@@ -57,8 +57,8 @@ public class WeatherNetworkHandler {
         weatherApi = retrofit.create(WeatherApiInterface.class);
     }
 
-    public void makeRequestToGetWeather() {
-        weatherApi.getWeather(53.858281, 27.485094).enqueue(new Callback<WeatherResponse>() {
+    public void makeRequestToGetWeather(double latitude, double longitude) {
+        weatherApi.getWeather(latitude, longitude).enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
                 callback.weatherResponseIsReceived(response.body());

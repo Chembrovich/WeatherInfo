@@ -32,5 +32,15 @@ public interface WeatherPresenterInterface {
 
     String getListItemCloudiness(int position);
 
+    void newLocationsIsGetted(double latitude, double longitude);
+
+    void gpsPermissionGranted();
+
+    void gpsDisabled();
+
+    void gpsEnabled();
+
+    void updateLocation();
+
     void detachView();
 }

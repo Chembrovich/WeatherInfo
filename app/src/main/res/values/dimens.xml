@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="image_view_current_state_size">100dp</dimen>
+    <dimen name="image_view_current_state_size">90dp</dimen>
     <dimen name="image_view_list_item_size">32dp</dimen>
     <dimen name="text_view_weather_parameter_size">13sp</dimen>
     <dimen name="image_view_weather_property_size">20dp</dimen>
