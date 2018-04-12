@@ -7,16 +7,14 @@
     android:background="@color/background_color">
 
     <TextView
-        android:id="@+id/text_view_now"
+        android:id="@+id/text_view_updation_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
-        android:text="@string/now"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
-        android:visibility="invisible"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,8 +26,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/swipe_refresh_layout"
-        app:layout_constraintStart_toStartOf="@+id/text_view_now"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_now"
+        app:layout_constraintStart_toStartOf="@+id/text_view_updation_status"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_updation_status"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView

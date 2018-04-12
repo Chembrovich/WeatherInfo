@@ -22,7 +22,7 @@ public interface WeatherPresenterInterface {
 
     String getListItemWeekDay(int position);
 
-    String getListItemDayWithMonth(int position);
+    String getListItemDayWithTime(int position);
 
     String getListItemTemperature(int position);
 
@@ -32,7 +32,7 @@ public interface WeatherPresenterInterface {
 
     String getListItemCloudiness(int position);
 
-    void newLocationsIsGetted(double latitude, double longitude);
+    void newLocationsIsReceived(double latitude, double longitude);
 
     void gpsPermissionGranted();
 
@@ -41,6 +41,8 @@ public interface WeatherPresenterInterface {
     void gpsEnabled();
 
     void updateLocation();
+
+    boolean isWeatherNew();
 
     void detachView();
 }

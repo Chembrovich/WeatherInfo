@@ -36,6 +36,11 @@ public class MainParameters {
     @Expose
     private double tempKf;
 
+    public MainParameters(double temperature, int humidity) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+    }
+
     public double getTemperature() {
         return temperature;
     }
@@ -66,5 +71,37 @@ public class MainParameters {
 
     public double getTempKf() {
         return tempKf;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
+
+    public void setTempMin(double tempMin) {
+        this.tempMin = tempMin;
+    }
+
+    public void setTempMax(double tempMax) {
+        this.tempMax = tempMax;
+    }
+
+    public void setPressure(double pressure) {
+        this.pressure = pressure;
+    }
+
+    public void setSeaLevel(double seaLevel) {
+        this.seaLevel = seaLevel;
+    }
+
+    public void setGroundLevel(double groundLevel) {
+        this.groundLevel = groundLevel;
+    }
+
+    public void setHumidity(int humidity) {
+        this.humidity = humidity;
+    }
+
+    public void setTempKf(double tempKf) {
+        this.tempKf = tempKf;
     }
 }

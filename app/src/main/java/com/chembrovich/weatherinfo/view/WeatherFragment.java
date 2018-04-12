@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chembrovich.weatherinfo.R;
+import com.chembrovich.weatherinfo.interactor.WeatherInteractor;
 import com.chembrovich.weatherinfo.presenter.WeatherPresenter;
 import com.chembrovich.weatherinfo.presenter.interfaces.WeatherPresenterInterface;
 import com.chembrovich.weatherinfo.view.interfaces.WeatherViewInterface;
@@ -36,7 +37,7 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
     private TextView currentStateAndWeatherTextView;
     private TextView cityTextView;
     private TextView countryTextView;
-    private TextView nowTextView;
+    private TextView updationStatusTextView;
     private SwipeRefreshLayout refreshLayout;
 
     private LocationManager locationManager;
@@ -68,7 +69,7 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
 
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-                presenter.newLocationsIsGetted(location.getLatitude(), location.getLongitude());
+                presenter.newLocationsIsReceived(location.getLatitude(), location.getLongitude());
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -83,7 +84,7 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
             }
         };
 
-        presenter = new WeatherPresenter();
+        presenter = new WeatherPresenter(new WeatherInteractor(getActivity().getApplicationContext()));
         presenter.attachView(this);
 
         Context context = view.getContext();
@@ -95,7 +96,7 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
         currentStateAndWeatherTextView = view.findViewById(R.id.text_view_current_state_and_weather);
         cityTextView = view.findViewById(R.id.text_view_city);
         countryTextView = view.findViewById(R.id.text_view_country);
-        nowTextView = view.findViewById(R.id.text_view_now);
+        updationStatusTextView = view.findViewById(R.id.text_view_updation_status);
 
         return view;
     }
@@ -115,7 +116,7 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,0,
                                                    locationListener);
 
-           refreshLayout.setRefreshing(true);
+            refreshLayout.setRefreshing(true);
         }
     }
 
@@ -150,16 +151,20 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
 
     @Override
     public void updateData() {
-        cityTextView.setText(presenter.getCity());
-        countryTextView.setText(presenter.getCountry());
+        //cityTextView.setText(presenter.getCity());
+        //countryTextView.setText(presenter.getCountry());
         currentStateAndWeatherTextView.setText(presenter.getCurrentStateAndWeather());
         currentStateImageView.setImageResource(StateImageHandler.getImageResourceId(presenter.getCurrentStateImageDescription()));
         recyclerView.getAdapter().notifyDataSetChanged();
-        nowTextView.setVisibility(View.VISIBLE);
+
+        if (presenter.isWeatherNew()) {
+            updationStatusTextView.setText(R.string.now);
+            refreshLayout.setRefreshing(false);
+        } else {
+            updationStatusTextView.setText(R.string.at_last_time);
+        }
 
         locationManager.removeUpdates(locationListener);
-
-        refreshLayout.setRefreshing(false);
     }
 
     @Override

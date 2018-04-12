@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.chembrovich.weatherinfo.model.WeatherResponse;
 import com.chembrovich.weatherinfo.network.interfaces.WeatherApiInterface;
-import com.chembrovich.weatherinfo.presenter.interfaces.GetWeatherCallback;
+import com.chembrovich.weatherinfo.presenter.interfaces.GetWeatherNetworkCallback;
 
 import java.io.IOException;
 
@@ -26,9 +26,9 @@ public class WeatherNetworkHandler {
     private static final String UNITS_QUERY_PARAMETER = "units";
 
     private WeatherApiInterface weatherApi;
-    private GetWeatherCallback callback;
+    private GetWeatherNetworkCallback callback;
 
-    public WeatherNetworkHandler(GetWeatherCallback callback) {
+    public WeatherNetworkHandler(GetWeatherNetworkCallback callback) {
         this.callback = callback;
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
@@ -61,7 +61,7 @@ public class WeatherNetworkHandler {
         weatherApi.getWeather(latitude, longitude).enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
-                callback.weatherResponseIsReceived(response.body());
+                callback.weatherIsReceivedFromNetwork(response.body());
             }
 
             @Override

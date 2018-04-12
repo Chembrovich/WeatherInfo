@@ -1,39 +1,58 @@
 package com.chembrovich.weatherinfo.presenter;
 
+import com.chembrovich.weatherinfo.database.WeatherDbEntity;
+import com.chembrovich.weatherinfo.database.interfaces.DatabaseHandlerInterface;
+import com.chembrovich.weatherinfo.interactor.interfaces.WeatherInteractorInterface;
 import com.chembrovich.weatherinfo.model.City;
-import com.chembrovich.weatherinfo.model.WeatherList;
+import com.chembrovich.weatherinfo.model.Clouds;
+import com.chembrovich.weatherinfo.model.MainParameters;
+import com.chembrovich.weatherinfo.model.WeatherDescription;
+import com.chembrovich.weatherinfo.model.WeatherListItem;
 import com.chembrovich.weatherinfo.model.WeatherResponse;
 import com.chembrovich.weatherinfo.model.WeatherState;
+import com.chembrovich.weatherinfo.model.Wind;
 import com.chembrovich.weatherinfo.network.WeatherNetworkHandler;
-import com.chembrovich.weatherinfo.presenter.interfaces.GetWeatherCallback;
+import com.chembrovich.weatherinfo.presenter.interfaces.GetWeatherDatabaseCallback;
+import com.chembrovich.weatherinfo.presenter.interfaces.GetWeatherNetworkCallback;
 import com.chembrovich.weatherinfo.presenter.interfaces.WeatherPresenterInterface;
 import com.chembrovich.weatherinfo.view.interfaces.WeatherViewInterface;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCallback {
+public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNetworkCallback,
+        GetWeatherDatabaseCallback {
     private static final String CELSIUS = "°C";
     private static final String MILES_PER_HOUR = "mph";
     private static final String PERCENT = "%";
     private static final String GPS_IS_DISABLED = "GPS is disabled";
     private static final String THERE_IS_NO_INTERNET_CONNECTION = "There is no internet connection";
 
+    private boolean isWeatherNew = false;
+
     private WeatherViewInterface view;
     private WeatherNetworkHandler networkHandler;
+    private WeatherInteractorInterface interactor;
+    private DatabaseHandlerInterface databaseHandler;
 
-    private List<WeatherList> weatherList;
+    private List<WeatherDbEntity> weatherListCache;
+    private List<WeatherListItem> weatherList;
     private City city;
 
-    public WeatherPresenter() {
+    public WeatherPresenter(WeatherInteractorInterface interactor) {
+        this.interactor = interactor;
     }
 
     @Override
     public void attachView(WeatherViewInterface view) {
         this.view = view;
         this.view.requestLocation();
+        databaseHandler = interactor.getDatabaseHandler(this);
+        //databaseHandler.deleteAll();
+        databaseHandler.getWeatherEntities();
         networkHandler = new WeatherNetworkHandler(this);
     }
 
@@ -57,7 +76,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     public String getCurrentStateAndWeather() {
         String currentState = weatherList.get(0).getWeatherDescription().get(0).getState().concat(" ");
         String currentTemperature = getTemperatureWithCelsius(weatherList.get(0).getMainParameters()
-                                                              .getTemperature());
+                .getTemperature());
 
         return currentState.concat(currentTemperature);
     }
@@ -133,7 +152,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     @Override
-    public String getListItemDayWithMonth(int position) {
+    public String getListItemDayWithTime(int position) {
         Date date = new java.util.Date(weatherList.get(position).getWeatherForecastTime() * 1000L);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.ENGLISH);
         /*sdf.setTimeZone(TimeZone.getDefault());
@@ -147,7 +166,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     private String getTemperatureWithCelsius(double temperature) {
-        return String.valueOf(temperature).concat(CELSIUS);
+        return String.valueOf(Math.round(temperature)).concat(CELSIUS);
     }
 
     @Override
@@ -156,7 +175,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     private String getWindSpeedWithMph(double windSpeed) {
-        return String.valueOf(windSpeed).concat(MILES_PER_HOUR);
+        return String.valueOf(Math.round(windSpeed)).concat(MILES_PER_HOUR);
     }
 
     @Override
@@ -174,7 +193,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     @Override
-    public void newLocationsIsGetted(double latitude, double longitude) {
+    public void newLocationsIsReceived(double latitude, double longitude) {
         networkHandler.makeRequestToGetWeather(latitude, longitude);
     }
 
@@ -199,14 +218,52 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     }
 
     @Override
-    public void detachView() {
-        this.view = null;
+    public boolean isWeatherNew() {
+        return isWeatherNew;
     }
 
     @Override
-    public void weatherResponseIsReceived(WeatherResponse response) {
+    public void detachView() {
+        this.view = null;
+        databaseHandler.closeDatabase();
+    }
+
+    private List<WeatherDbEntity> getCacheListUsingWeatherListFromNetwork() {
+        List<WeatherDbEntity> cacheList = new ArrayList<>();
+        int id = 0;
+
+        for (WeatherListItem newWeatherItem : weatherList) {
+            WeatherDbEntity cacheWeather = new WeatherDbEntity();
+
+            cacheWeather.setId(id);
+            cacheWeather.setCloudiness(newWeatherItem.getClouds().getCloudiness());
+            cacheWeather.setForecastTime(newWeatherItem.getWeatherForecastTime());
+            cacheWeather.setHumidity(newWeatherItem.getMainParameters().getHumidity());
+            cacheWeather.setImageId(newWeatherItem.getWeatherDescription().get(0).getIcon());
+            cacheWeather.setState(newWeatherItem.getWeatherDescription().get(0).getState());
+            cacheWeather.setTemperature(newWeatherItem.getMainParameters().getTemperature());
+            cacheWeather.setWindSpeed(newWeatherItem.getWind().getSpeed());
+
+            cacheList.add(cacheWeather);
+            id++;
+        }
+        return cacheList;
+    }
+
+    private void updateDatabase() {
+        if (weatherList != null) {
+            databaseHandler.updateAll(getCacheListUsingWeatherListFromNetwork());
+        }
+    }
+
+    @Override
+    public void weatherIsReceivedFromNetwork(WeatherResponse response) {
         this.weatherList = response.getWeatherList();
         this.city = response.getCity();
+
+        updateDatabase();
+
+        isWeatherNew = true;
 
         if (view != null) {
             view.updateData();
@@ -216,5 +273,44 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherCa
     @Override
     public void onFailure() {
         view.makeMessage(THERE_IS_NO_INTERNET_CONNECTION);
+    }
+
+    @Override
+    public void weatherIsReceivedFromDatabase(List<WeatherDbEntity> weatherEntities) {
+        this.weatherListCache = weatherEntities;
+        databaseHandler.closeDatabase();
+
+        if (!weatherListCache.isEmpty()) {
+            setWeatherListFromCache();
+
+            if (view != null && !isWeatherNew) {
+                view.updateData();
+            }
+        }
+    }
+
+    private void setWeatherListFromCache() {
+        weatherList = new ArrayList<>();
+        for (WeatherDbEntity weatherCache : weatherListCache) {
+            WeatherListItem newWeatherItem = new WeatherListItem();
+
+            List<WeatherDescription> description = new ArrayList<>();
+            description.add(new WeatherDescription(weatherCache.getState(), weatherCache.getImageId()));
+            newWeatherItem.setWeatherDescription(description);
+
+            MainParameters parameters = new MainParameters(weatherCache.getTemperature(),
+                    weatherCache.getHumidity());
+            newWeatherItem.setMainParameters(parameters);
+
+            Wind wind = new Wind(weatherCache.getWindSpeed());
+            newWeatherItem.setWind(wind);
+
+            Clouds clouds = new Clouds(weatherCache.getCloudiness());
+            newWeatherItem.setClouds(clouds);
+
+            newWeatherItem.setWeatherForecastTime(weatherCache.getForecastTime());
+
+            weatherList.add(newWeatherItem);
+        }
     }
 }

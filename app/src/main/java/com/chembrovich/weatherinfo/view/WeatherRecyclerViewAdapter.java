@@ -29,7 +29,7 @@ public class WeatherRecyclerViewAdapter extends RecyclerView.Adapter<WeatherRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.weekDay.setText(presenter.getListItemWeekDay(position));
-        holder.dayWithMonth.setText(presenter.getListItemDayWithMonth(position));
+        holder.dayWithMonth.setText(presenter.getListItemDayWithTime(position));
         holder.stateText.setText(presenter.getListItemWeatherState(position));
         holder.temperature.setText(presenter.getListItemTemperature(position));
         holder.windSpeed.setText(presenter.getListItemWindSpeed(position));

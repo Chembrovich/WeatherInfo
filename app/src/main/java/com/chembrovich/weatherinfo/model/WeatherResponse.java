@@ -12,7 +12,7 @@ public class WeatherResponse {
 
     @SerializedName("list")
     @Expose
-    private List<WeatherList> weatherList;
+    private List<WeatherListItem> weatherList;
 
     @SerializedName("city")
     @Expose
@@ -22,7 +22,7 @@ public class WeatherResponse {
         return code;
     }
 
-    public List<WeatherList> getWeatherList() {
+    public List<WeatherListItem> getWeatherList() {
         return weatherList;
     }
 

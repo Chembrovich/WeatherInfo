@@ -8,7 +8,15 @@ public class Clouds {
     @Expose
     private int cloudiness;
 
+    public Clouds(int cloudiness) {
+        this.cloudiness = cloudiness;
+    }
+
     public int getCloudiness() {
         return cloudiness;
+    }
+
+    public void setCloudiness(int cloudiness) {
+        this.cloudiness = cloudiness;
     }
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Weather Info</string>
-    <string name="now">now</string>
+    <string name="now">Now</string>
+    <string name="at_last_time">At last time</string>
 </resources>
