@@ -11,7 +11,5 @@ public interface DatabaseHandlerInterface {
 
     void updateAll(List<WeatherDbEntity> weatherEntities);
 
-    void deleteAll();
-
     void closeDatabase();
 }

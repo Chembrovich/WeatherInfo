@@ -20,6 +20,11 @@ public class City {
     @Expose
     private String countryCode;
 
+    public City(String name, String country) {
+        this.name = name;
+        this.countryCode = country;
+    }
+
     public int getId() {
         return id;
     }

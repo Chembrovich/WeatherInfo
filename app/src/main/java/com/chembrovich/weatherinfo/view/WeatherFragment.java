@@ -2,6 +2,7 @@ package com.chembrovich.weatherinfo.view;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -25,6 +26,9 @@ import com.chembrovich.weatherinfo.interactor.WeatherInteractor;
 import com.chembrovich.weatherinfo.presenter.WeatherPresenter;
 import com.chembrovich.weatherinfo.presenter.interfaces.WeatherPresenterInterface;
 import com.chembrovich.weatherinfo.view.interfaces.WeatherViewInterface;
+
+import static android.content.Context.MODE_PRIVATE;
+import static android.support.v4.content.PermissionChecker.checkSelfPermission;
 
 public class WeatherFragment extends Fragment implements WeatherViewInterface {
     private int GPS_PERMISSIONS_REQUEST_CODE = 1;
@@ -103,11 +107,10 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
 
     @Override
     public void requestLocation() {
-        if (ActivityCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ) {
+        if (checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED ) {
 
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     GPS_PERMISSIONS_REQUEST_CODE);
         } else {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0,0,
@@ -151,8 +154,8 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
 
     @Override
     public void updateData() {
-        //cityTextView.setText(presenter.getCity());
-        //countryTextView.setText(presenter.getCountry());
+        cityTextView.setText(presenter.getCity());
+        countryTextView.setText(presenter.getCountry());
         currentStateAndWeatherTextView.setText(presenter.getCurrentStateAndWeather());
         currentStateImageView.setImageResource(StateImageHandler.getImageResourceId(presenter.getCurrentStateImageDescription()));
         recyclerView.getAdapter().notifyDataSetChanged();
@@ -160,11 +163,36 @@ public class WeatherFragment extends Fragment implements WeatherViewInterface {
         if (presenter.isWeatherNew()) {
             updationStatusTextView.setText(R.string.now);
             refreshLayout.setRefreshing(false);
+            locationManager.removeUpdates(locationListener);
         } else {
             updationStatusTextView.setText(R.string.at_last_time);
         }
+    }
 
-        locationManager.removeUpdates(locationListener);
+    @Override
+    public void stopRefreshing() {
+        refreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void saveLocationToPreferences(String city, String country) {
+        SharedPreferences preferences = getActivity().getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor prefEditor = preferences.edit();
+        prefEditor.putString(getString(R.string.city_key),city);
+        prefEditor.putString(getString(R.string.country_key),country);
+        prefEditor.apply();
+    }
+
+    @Override
+    public String getCityFromPreferences() {
+        SharedPreferences preferences = getActivity().getPreferences(MODE_PRIVATE);
+        return preferences.getString(getString(R.string.city_key), "");
+    }
+
+    @Override
+    public String getCountryFromPreferences() {
+        SharedPreferences preferences = getActivity().getPreferences(MODE_PRIVATE);
+        return preferences.getString(getString(R.string.country_key), "");
     }
 
     @Override

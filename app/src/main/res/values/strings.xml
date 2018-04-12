@@ -2,4 +2,7 @@
     <string name="app_name">Weather Info</string>
     <string name="now">Now</string>
     <string name="at_last_time">At last time</string>
+    <string name="preference_file_key">preferences</string>
+    <string name="city_key">city</string>
+    <string name="country_key">country</string>
 </resources>

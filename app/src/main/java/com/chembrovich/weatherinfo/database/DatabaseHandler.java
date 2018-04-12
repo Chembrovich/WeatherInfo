@@ -30,14 +30,6 @@ public class DatabaseHandler implements DatabaseHandlerInterface,WeatherAsyncTas
         }).start();
     }
 
-    @Override
-    public void deleteAll() {
-        new Thread(new Runnable() {
-            public void run() {
-                database.weatherDao().deleteAll();
-            }
-        }).start();
-    }
 
     @Override
     public void insertAll(final List<WeatherDbEntity> weatherEntities) {

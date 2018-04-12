@@ -44,6 +44,7 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
 
     public WeatherPresenter(WeatherInteractorInterface interactor) {
         this.interactor = interactor;
+        weatherListCache = new ArrayList<>();
     }
 
     @Override
@@ -51,8 +52,10 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
         this.view = view;
         this.view.requestLocation();
         databaseHandler = interactor.getDatabaseHandler(this);
-        //databaseHandler.deleteAll();
         databaseHandler.getWeatherEntities();
+
+        city = new City(view.getCityFromPreferences(),view.getCountryFromPreferences());
+
         networkHandler = new WeatherNetworkHandler(this);
     }
 
@@ -155,8 +158,6 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
     public String getListItemDayWithTime(int position) {
         Date date = new java.util.Date(weatherList.get(position).getWeatherForecastTime() * 1000L);
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM HH:mm", Locale.ENGLISH);
-        /*sdf.setTimeZone(TimeZone.getDefault());
-        String formattedDate = sdf.format(date);*/
         return sdf.format(date);
     }
 
@@ -199,22 +200,30 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
 
     @Override
     public void gpsPermissionGranted() {
-        view.requestLocation();
+        if (view != null) {
+            view.requestLocation();
+        }
     }
 
     @Override
     public void gpsDisabled() {
-        view.makeMessage(GPS_IS_DISABLED);
+        if (view != null) {
+            view.makeMessage(GPS_IS_DISABLED);
+        }
     }
 
     @Override
     public void gpsEnabled() {
-        view.requestLocation();
+        if (view != null) {
+            view.requestLocation();
+        }
     }
 
     @Override
     public void updateLocation() {
-        view.requestLocation();
+        if (view != null) {
+            view.requestLocation();
+        }
     }
 
     @Override
@@ -247,12 +256,18 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
             cacheList.add(cacheWeather);
             id++;
         }
+        this.weatherListCache = cacheList;
+
         return cacheList;
     }
 
     private void updateDatabase() {
         if (weatherList != null) {
-            databaseHandler.updateAll(getCacheListUsingWeatherListFromNetwork());
+            if (weatherListCache.isEmpty()) {
+                databaseHandler.insertAll(getCacheListUsingWeatherListFromNetwork());
+            } else {
+                databaseHandler.updateAll(getCacheListUsingWeatherListFromNetwork());
+            }
         }
     }
 
@@ -260,29 +275,27 @@ public class WeatherPresenter implements WeatherPresenterInterface, GetWeatherNe
     public void weatherIsReceivedFromNetwork(WeatherResponse response) {
         this.weatherList = response.getWeatherList();
         this.city = response.getCity();
-
-        updateDatabase();
-
         isWeatherNew = true;
-
         if (view != null) {
+            view.saveLocationToPreferences(city.getName(), city.getCountryCode());
             view.updateData();
         }
+        updateDatabase();
     }
 
     @Override
     public void onFailure() {
-        view.makeMessage(THERE_IS_NO_INTERNET_CONNECTION);
+        if (view != null) {
+            view.makeMessage(THERE_IS_NO_INTERNET_CONNECTION);
+            view.stopRefreshing();
+        }
     }
 
     @Override
     public void weatherIsReceivedFromDatabase(List<WeatherDbEntity> weatherEntities) {
         this.weatherListCache = weatherEntities;
-        databaseHandler.closeDatabase();
-
         if (!weatherListCache.isEmpty()) {
             setWeatherListFromCache();
-
             if (view != null && !isWeatherNew) {
                 view.updateData();
             }

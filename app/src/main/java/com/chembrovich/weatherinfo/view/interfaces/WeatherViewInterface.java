@@ -6,4 +6,12 @@ public interface WeatherViewInterface {
     void makeMessage(String message);
 
     void requestLocation();
+
+    void stopRefreshing();
+
+    void saveLocationToPreferences(String city, String country);
+
+    String getCityFromPreferences();
+
+    String getCountryFromPreferences();
 }

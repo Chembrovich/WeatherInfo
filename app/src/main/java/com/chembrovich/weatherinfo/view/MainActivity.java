@@ -25,6 +25,5 @@ public class MainActivity extends AppCompatActivity implements WeatherFragment.O
 
     @Override
     public void onWeatherFragmentInteraction() {
-
     }
 }
