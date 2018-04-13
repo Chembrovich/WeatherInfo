@@ -29,4 +29,16 @@ public class WeatherResponse {
     public City getCity() {
         return city;
     }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setWeatherList(List<WeatherListItem> weatherList) {
+        this.weatherList = weatherList;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
+    }
 }

@@ -7,7 +7,7 @@
     android:background="@color/background_color">
 
     <TextView
-        android:id="@+id/text_view_updation_status"
+        android:id="@+id/text_view_updating_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -26,8 +26,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@+id/swipe_refresh_layout"
-        app:layout_constraintStart_toStartOf="@+id/text_view_updation_status"
-        app:layout_constraintTop_toBottomOf="@+id/text_view_updation_status"
+        app:layout_constraintStart_toStartOf="@+id/text_view_updating_status"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_updating_status"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
@@ -45,7 +45,7 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toEndOf="@+id/image_view_current_state"
         app:layout_constraintTop_toTopOf="@+id/image_view_current_state"
-        app:layout_constraintVertical_bias="0.14999998" />
+        app:layout_constraintVertical_bias="0.15" />
 
     <TextView
         android:id="@+id/text_view_country"
@@ -81,11 +81,8 @@
             android:layout_height="0dp"
             android:background="@color/list_background_color"
             app:layoutManager="LinearLayoutManager"
-
             tools:context="com.chembrovich.weatherinfo.view.WeatherFragment"
-            tools:listitem="@layout/weather_item">
-
-        </android.support.v7.widget.RecyclerView>
+            tools:listitem="@layout/weather_item"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
@@ -100,8 +97,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/text_view_city"
         app:layout_constraintTop_toBottomOf="@+id/text_view_city" />
-
-
 </android.support.constraint.ConstraintLayout>
 
 

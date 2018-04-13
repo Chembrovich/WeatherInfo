@@ -5,5 +5,5 @@ import com.chembrovich.weatherinfo.model.WeatherResponse;
 public interface GetWeatherNetworkCallback {
     void weatherIsReceivedFromNetwork(WeatherResponse response);
 
-    void onFailure();
+    void onFailure(String message);
 }

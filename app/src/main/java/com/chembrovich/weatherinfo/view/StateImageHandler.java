@@ -8,8 +8,12 @@ class StateImageHandler {
         switch (state) {
             case CLEAR_SKY:
                 return R.drawable.clear_sky;
+            case CLEAR_SKY_NIGHT:
+                return R.drawable.clear_sky_night;
             case FEW_CLOUDS:
                 return R.drawable.few_clouds;
+            case FEW_CLOUDS_NIGHT:
+                return R.drawable.few_clouds_night;
             case SCATTERED_CLOUDS:
                 return R.drawable.scattered_clouds;
             case BROKEN_CLOUDS:
@@ -18,6 +22,8 @@ class StateImageHandler {
                 return R.drawable.shower_rain;
             case RAIN:
                 return R.drawable.rain;
+            case RAIN_NIGHT:
+                return R.drawable.rain_night;
             case THUNDERSTORM:
                 return R.drawable.thunderstorm;
             case SNOW:

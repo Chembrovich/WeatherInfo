@@ -24,6 +24,11 @@ public class WeatherNetworkHandler {
     private static final String METRIC = "metric";
     private static final String API_KEY_QUERY_PARAMETER = "APPID";
     private static final String UNITS_QUERY_PARAMETER = "units";
+    private static final String THERE_IS_NO_INTERNET_CONNECTION = "There is no internet connection";
+    private static final String NETWORK_ERROR_MESSAGE = "Network error";
+    private static final String SERVER_ERROR_MESSAGE = "Server error";
+    private static final int SERVER_ERROR_FIRST_CODE = 500;
+    private static final int SERVER_ERROR_LAST_CODE = 599;
 
     private WeatherApiInterface weatherApi;
     private GetWeatherNetworkCallback callback;
@@ -39,7 +44,6 @@ public class WeatherNetworkHandler {
                         HttpUrl httpUrl = original.url();
                         HttpUrl newHttpUrl = httpUrl.newBuilder()
                                             .addQueryParameter(API_KEY_QUERY_PARAMETER, API_KEY).build();
-
                         newHttpUrl = newHttpUrl.newBuilder()
                                     .addQueryParameter(UNITS_QUERY_PARAMETER, METRIC).build();
                         Request.Builder requestBuilder = original.newBuilder().url(newHttpUrl);
@@ -61,13 +65,25 @@ public class WeatherNetworkHandler {
         weatherApi.getWeather(latitude, longitude).enqueue(new Callback<WeatherResponse>() {
             @Override
             public void onResponse(@NonNull Call<WeatherResponse> call, @NonNull Response<WeatherResponse> response) {
-                callback.weatherIsReceivedFromNetwork(response.body());
+                if (response.isSuccessful()) {
+                    callback.weatherIsReceivedFromNetwork(response.body());
+                } else {
+                    if (isServerError(response.code())) {
+                        callback.onFailure(SERVER_ERROR_MESSAGE);
+                    } else {
+                        callback.onFailure(NETWORK_ERROR_MESSAGE);
+                    }
+                }
             }
 
             @Override
             public void onFailure(@NonNull Call<WeatherResponse> call, @NonNull Throwable t) {
-                callback.onFailure();
+                callback.onFailure(THERE_IS_NO_INTERNET_CONNECTION);
             }
         });
+    }
+
+    private boolean isServerError(int code) {
+        return code >= SERVER_ERROR_FIRST_CODE && code <= SERVER_ERROR_LAST_CODE;
     }
 }

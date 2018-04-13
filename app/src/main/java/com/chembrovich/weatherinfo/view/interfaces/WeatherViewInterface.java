@@ -5,6 +5,8 @@ public interface WeatherViewInterface {
 
     void makeMessage(String message);
 
+    void makeErrorLog(String tag, String message);
+
     void requestLocation();
 
     void stopRefreshing();
