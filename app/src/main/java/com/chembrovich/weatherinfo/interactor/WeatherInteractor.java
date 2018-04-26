@@ -16,6 +16,6 @@ public class WeatherInteractor implements WeatherInteractorInterface {
 
     @Override
     public DatabaseHandlerInterface getDatabaseHandler(GetWeatherDatabaseCallback callback) {
-        return new DatabaseHandler(appContext, callback);
+        return new DatabaseHandler(/*appContext,*/ callback);
     }
 }
